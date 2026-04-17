@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sesión 14 — Lenguajes de Desarrollo · EGEL Plus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f6f9;--card:#fff;--card2:#f0f2f6;--border:#dde1ea;
+  --text:#374151;--text2:#6b7280;--white:#111827;
+  --green:#16a34a;--green2:#15803d;--greenBg:rgba(22,163,74,.08);
+  --red:#dc2626;--red2:#b91c1c;--redBg:rgba(220,38,38,.08);
+  --blue:#2563eb;--blueBg:rgba(37,99,235,.08);
+  --amber:#d97706;--amberBg:rgba(217,119,6,.1);
+  --purple:#7c3aed;--purpleBg:rgba(124,58,237,.08);
+  --teal:#0d9488;--tealBg:rgba(13,148,136,.08);
+  --orange:#ea580c;--orangeBg:rgba(234,88,12,.08);
+  --pink:#db2777;--pinkBg:rgba(219,39,119,.08);
+  --nav-bg:rgba(244,246,249,.97);
+  --opt-hover:#f8fffe;--scrollbar:#c9d0dc;--track:#e5e7eb;
+  --row-hover:rgba(0,0,0,.02);
+}
+body.dark{
+  --bg:#0a0c10;--card:#12151e;--card2:#181c28;--border:#1e2436;
+  --text:#c8cdd8;--text2:#7c8494;--white:#e8ecf4;
+  --green:#22c55e;--green2:#15803d;--greenBg:rgba(34,197,94,.08);
+  --red:#ef4444;--red2:#b91c1c;--redBg:rgba(239,68,68,.08);
+  --blue:#3b82f6;--blueBg:rgba(59,130,246,.08);
+  --amber:#f59e0b;--amberBg:rgba(245,158,11,.08);
+  --purple:#a78bfa;--purpleBg:rgba(167,139,250,.08);
+  --teal:#14b8a6;--tealBg:rgba(20,184,166,.08);
+  --orange:#f97316;--orangeBg:rgba(249,115,22,.08);
+  --pink:#ec4899;--pinkBg:rgba(236,72,153,.08);
+  --nav-bg:rgba(10,12,16,.95);
+  --opt-hover:#1a1f30;--scrollbar:#2a3040;--track:#1a1f2e;
+  --row-hover:rgba(255,255,255,.015);
+}
+body.dark .hdr{background:linear-gradient(135deg,#111422,#141e2e 50%,#121a2a);}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.7;min-height:100vh}
+::selection{background:var(--teal);color:#fff}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:3px}
+.topnav{background:var(--nav-bg);border-bottom:1px solid var(--border);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.nav-brand{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--teal);text-transform:uppercase}
+.nav-tabs{display:flex;gap:4px}
+.ntab{padding:7px 14px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.ntab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.ntab:hover:not(.active){background:var(--card2);border-color:var(--border);color:var(--white)}
+.shell{max-width:920px;margin:0 auto;padding:20px 14px 80px}
+.hdr{background:linear-gradient(135deg,#e8f4f2,#dff0f8 50%,#e4eeff);border:1px solid var(--border);transition:background .3s;border-radius:16px;padding:26px 24px;margin-bottom:20px;position:relative;overflow:hidden}
+.hdr::after{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(13,148,136,.07),transparent 70%);pointer-events:none}
+.hdr .tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;color:var(--text2);margin-bottom:6px;text-transform:uppercase}
+.hdr h1{font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px}
+.hdr p{font-size:12.5px;color:var(--text2)}
+.hidden{display:none!important}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page{animation:fadeUp .3s ease both}
+.btn{padding:10px 20px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:#0f766e}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}.btn-ghost:hover{border-color:var(--teal);color:var(--white)}
+.node{border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:8px}
+.node-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .2s}
+.node-head:hover{background:var(--row-hover)}
+.node-icon{font-size:18px;min-width:28px;text-align:center}
+.node-title{font-size:15px;font-weight:700;color:var(--white)}
+.node-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.node-arrow{font-size:11px;color:var(--text2);margin-left:auto;transition:transform .25s}
+.node.open .node-arrow{transform:rotate(90deg)}
+.node-body{display:none;padding:0 18px 16px}
+.node.open .node-body{display:block;animation:fadeUp .2s ease both}
+.node.intro .node-head{background:rgba(13,148,136,.05)}.node.intro{border-color:rgba(13,148,136,.25)}.node.intro .node-title{color:#0f766e}
+.node.tipos .node-head{background:rgba(37,99,235,.05)}.node.tipos{border-color:rgba(37,99,235,.25)}.node.tipos .node-title{color:#1d4ed8}
+.node.comp .node-head{background:rgba(124,58,237,.05)}.node.comp{border-color:rgba(124,58,237,.25)}.node.comp .node-title{color:#6d28d9}
+.node.tipos2 .node-head{background:rgba(234,88,12,.05)}.node.tipos2{border-color:rgba(234,88,12,.25)}.node.tipos2 .node-title{color:#c2410c}
+.node.scope .node-head{background:rgba(219,39,119,.05)}.node.scope{border-color:rgba(219,39,119,.25)}.node.scope .node-title{color:#be185d}
+.node.sub .node-head{background:rgba(217,119,6,.05)}.node.sub{border-color:rgba(217,119,6,.25)}.node.sub .node-title{color:#b45309}
+.node.debug .node-head{background:rgba(22,163,74,.05)}.node.debug{border-color:rgba(22,163,74,.25)}.node.debug .node-title{color:#15803d}
+.child{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:10px 14px;margin-top:6px;cursor:pointer;overflow:hidden;transition:all .2s}
+.child:hover{border-color:var(--teal)}
+.child-head{display:flex;align-items:center;gap:8px}
+.child-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.child-name{font-size:13px;font-weight:600;color:var(--white)}
+.child-tag{font-family:'DM Mono',monospace;font-size:10px;color:var(--text2);margin-left:auto;padding-right:4px}
+.child-arrow{font-size:11px;color:var(--text2);transition:transform .2s}
+.child.open .child-arrow{transform:rotate(90deg)}
+.child-body{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text);line-height:1.75}
+.child.open .child-body{display:block}
+.child-body strong{color:var(--white)}
+.tip{background:var(--amberBg);border:1px solid rgba(217,119,6,.2);border-radius:7px;padding:9px 12px;margin-top:8px;font-size:12px}
+.tip strong{color:var(--amber)}
+.ex{background:var(--tealBg);border:1px solid rgba(13,148,136,.2);border-radius:7px;padding:9px 12px;margin-top:6px;font-size:12px}
+.ex strong{color:var(--teal)}
+.code{background:#1e2433;border-radius:7px;padding:10px 14px;margin-top:8px;font-family:'DM Mono',monospace;font-size:11.5px;color:#c8d3e8;line-height:1.7;overflow-x:auto}
+.code .c{color:#6b7a99}.code .k{color:#7dd3fc}.code .s{color:#86efac}.code .f{color:#fbbf24}.code .n{color:#e2e8f0}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.vs-box{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:12px}
+.vs-box h4{font-size:11px;font-weight:700;margin-bottom:4px;font-family:'DM Mono',monospace;letter-spacing:.5px}
+.d-conn{display:flex;align-items:center;gap:8px;padding:2px 22px;margin:4px 0}
+.d-conn-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.d-conn-txt{font-family:'DM Mono',monospace;font-size:10px;color:var(--text2)}
+@media(max-width:560px){.vs-grid{grid-template-columns:1fr}}
+.comp-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.ctab{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.ctab.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.ctab:hover:not(.active){border-color:var(--teal);color:var(--white)}
+.comp-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px;animation:fadeUp .3s ease both}
+.comp-wrap table{width:100%;border-collapse:collapse}
+.comp-wrap th{background:var(--card2);padding:10px 14px;text-align:left;font-size:12px;font-weight:600;color:var(--white);border-bottom:1px solid var(--border)}
+.comp-wrap th:first-child{width:22%;font-family:'DM Mono',monospace;font-size:10.5px;color:var(--text2)}
+.comp-wrap td{padding:9px 14px;font-size:12.5px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;line-height:1.6}
+.comp-wrap tr:last-child td{border-bottom:none}
+.comp-wrap td:first-child{font-weight:600;color:var(--teal);font-size:12px}
+.comp-wrap tr:hover td{background:var(--row-hover)}
+.flash-wrap{max-width:600px;margin:0 auto}
+.flash-progress{display:flex;gap:3px;margin-bottom:16px;flex-wrap:wrap}
+.fp-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background .3s}
+.fp-dot.done{background:var(--teal)}.fp-dot.cur{background:var(--amber)}
+.flash-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;text-align:center}
+.flash-card:hover{border-color:var(--teal);transform:translateY(-2px)}
+.flash-card::after{content:'TAP para voltear';position:absolute;bottom:12px;right:16px;font-family:'DM Mono',monospace;font-size:10px;color:var(--text2);letter-spacing:1px}
+.flash-cat{font-family:'DM Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;margin-bottom:8px;display:inline-block}
+.flash-emoji{font-size:30px;margin-bottom:10px}
+.flash-q{font-size:15px;font-weight:600;color:var(--white);line-height:1.55}
+.flash-ans{animation:fadeUp .25s ease}
+.flash-ans .ans-title{font-size:16px;font-weight:700;color:var(--teal);margin-bottom:8px}
+.flash-ans .ans-body{font-size:12.5px;color:var(--text);line-height:1.7}
+.flash-ans .ans-key{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);margin-top:8px}
+.flash-nav{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.flash-ctr{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)}
+.flash-filter{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.ff-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:11.5px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.ff-btn.active{border-color:var(--teal);color:var(--teal);background:var(--tealBg)}
+.pbar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.pbar .track{flex:1;height:6px;background:var(--track);border-radius:3px;overflow:hidden}
+.pbar .fill{height:100%;background:linear-gradient(90deg,var(--teal),#2563eb);border-radius:3px;transition:width .4s ease}
+.pbar .label{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);white-space:nowrap}
+.qcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px;animation:fadeUp .35s ease both}
+.qnum{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--teal);margin-bottom:8px}
+.qtxt{font-size:14px;color:var(--white);font-weight:500;line-height:1.75;margin-bottom:6px;white-space:pre-line}
+.qcode{background:#1e2433;border-radius:8px;padding:12px 16px;margin-bottom:12px;font-family:'DM Mono',monospace;font-size:12px;color:#c8d3e8;line-height:1.7;overflow-x:auto;white-space:pre}
+.qtag{display:inline-block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:5px;margin-bottom:12px;text-transform:uppercase}
+.qtag.tip{background:var(--blueBg);color:#1d4ed8}
+.qtag.comp{background:var(--purpleBg);color:#6d28d9}
+.qtag.tipos{background:var(--orangeBg);color:#c2410c}
+.qtag.scope{background:var(--pinkBg);color:#be185d}
+.qtag.sub{background:var(--amberBg);color:#b45309}
+.qtag.debug{background:var(--greenBg);color:#15803d}
+.qtag.mix{background:var(--tealBg);color:#0f766e}
+.opts{display:grid;gap:8px}
+.opt{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-size:13px;color:var(--text);cursor:pointer;transition:all .2s;text-align:left;font-family:'DM Sans',sans-serif;line-height:1.6;display:flex;align-items:flex-start;gap:10px}
+.opt:hover:not(.locked){border-color:var(--teal);background:var(--opt-hover)}
+.opt .letter{font-family:'DM Mono',monospace;font-weight:600;font-size:13px;color:var(--text2);min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:rgba(128,128,128,.1);flex-shrink:0;margin-top:1px}
+.opt.correct{border-color:var(--green2);background:var(--greenBg)}.opt.correct .letter{background:var(--green);color:#fff}
+.opt.wrong{border-color:var(--red2);background:var(--redBg)}.opt.wrong .letter{background:var(--red);color:#fff}
+.opt.locked{cursor:default;opacity:.7}.opt.correct.locked{opacity:1}.opt.dimmed{opacity:.45}
+.fb{margin-top:14px;padding:16px;border-radius:10px;animation:fadeUp .3s ease both;font-size:13px;line-height:1.75}
+.fb.ok{background:var(--greenBg);border:1px solid rgba(22,163,74,.2)}.fb.ok .fb-tag{color:var(--green)}
+.fb.no{background:var(--redBg);border:1px solid rgba(220,38,38,.2)}.fb.no .fb-tag{color:var(--red)}
+.fb-tag{font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;font-family:'DM Mono',monospace}
+.fb-text{color:var(--text)}
+.fb-trap{margin-top:10px;padding:10px 12px;background:var(--amberBg);border:1px solid rgba(217,119,6,.2);border-radius:8px}
+.fb-trap .trap-tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--amber);font-weight:600;margin-bottom:4px}
+.fb-trap p{font-size:12px;color:var(--text);line-height:1.6}
+.nav{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.results{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;animation:fadeUp .4s ease both}
+.results h2{font-size:20px;color:var(--white);margin-bottom:16px}
+.score-big{font-family:'DM Mono',monospace;font-size:48px;font-weight:700;margin-bottom:4px}
+.score-ok{color:var(--green)}.score-mid{color:var(--amber)}.score-bad{color:var(--red)}
+.cat-scores{display:grid;gap:6px;margin:16px 0}
+.cat-row{display:flex;align-items:center;gap:10px;font-size:13px}
+.cat-row .cat-name{min-width:180px;color:var(--text2);font-size:12px}
+.cat-row .cat-track{flex:1;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden}
+.cat-row .cat-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.cat-row .cat-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);min-width:36px;text-align:right}
+.qdots{display:flex;gap:4px;flex-wrap:wrap;margin-top:14px}
+.qdot{width:26px;height:26px;border-radius:6px;font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);background:var(--card2);color:var(--text2);transition:all .2s}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <span class="nav-brand">EGEL · Área 3 · Sesión 14</span>
+  <div style="display:flex;align-items:center;gap:6px">
+    <div class="nav-tabs">
+      <button class="ntab active" onclick="showPage('mapa')">🗺️ Mapa</button>
+      <button class="ntab" onclick="showPage('compara')">⚖️ Comparativas</button>
+      <button class="ntab" onclick="showPage('flash')">🃏 Flashcards</button>
+      <button class="ntab" onclick="showPage('quiz')">📝 Quiz</button>
+    </div>
+    <button id="theme-btn" onclick="toggleTheme()" style="padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:15px;line-height:1;transition:all .2s" title="Cambiar tema">🌙</button>
+  </div>
+</div>
+<div class="shell">
+  <div class="hdr">
+    <div class="tag">EGEL Plus · Área 3 · Subárea 3.1</div>
+    <h1>Lenguajes de Desarrollo de Software</h1>
+    <p>Clasificación · Compiladores vs Intérpretes · Sintaxis y Semántica · Sistemas de tipos · Scope · Subprogramas · Depuración</p>
+  </div>
+  <div id="page-mapa" class="page"></div>
+  <div id="page-compara" class="hidden page"></div>
+  <div id="page-flash" class="hidden page"></div>
+  <div id="page-quiz" class="hidden page"></div>
+</div>
+<script>
+const MAPA = [
+  {
+    cls:'intro', icon:'💡', title:'¿Qué es un lenguaje de programación?',
+    sub:'La base — antes de clasificar',
+    desc:'Un lenguaje de programación es un sistema formal de notación que permite a los humanos expresar instrucciones para que una computadora las ejecute. Es el puente entre el pensamiento humano y el hardware.',
+    items:[
+      { dot:'#0d9488', name:'Niveles de abstracción', tag:'Jerarquía',
+        body:`Los lenguajes se ordenan por qué tan cerca o lejos están del hardware:<br><br>
+<strong>Lenguaje máquina:</strong> 0s y 1s. Lo único que entiende el procesador directamente. Específico de cada arquitectura.<br>
+<strong>Ensamblador (Assembly):</strong> mnemónicos que representan instrucciones de máquina (MOV, ADD, JMP). Un ensamblador lo convierte a código máquina. Aún específico de arquitectura.<br>
+<strong>Alto nivel:</strong> sintaxis cercana al inglés. Abstraen el hardware completamente. C, Python, Java, etc.<br><br>
+<strong>Microprogramación:</strong> nivel aún más bajo que el ensamblador — instrucciones dentro del microcontrolador/procesador que implementan las instrucciones de máquina.
+<div class="tip"><strong>⚡ EGEL:</strong> Microprogramación → ensamblador → alto nivel. Cada nivel abstrae más al nivel anterior.</div>` },
+      { dot:'#0d9488', name:'Tipos de lenguajes de alto nivel', tag:'Clasificación',
+        body:`El SWEBOK clasifica los lenguajes de alto nivel según su paradigma predominante:<br><br>
+<strong>Procedurales/imperativos:</strong> C, Pascal, COBOL — secuencia de instrucciones con estado mutable.<br>
+<strong>Orientados a objetos:</strong> Java, C++, C#, Python, Smalltalk — organizan el código en objetos.<br>
+<strong>Funcionales:</strong> Haskell, Erlang, Lisp — funciones puras, sin estado mutable.<br>
+<strong>Lógicos:</strong> Prolog — hechos, reglas y motor de inferencia.<br>
+<strong>Scripting:</strong> JavaScript, Python, Ruby, PHP — interpretados, alto nivel, glue code.<br>
+<strong>DSL (Domain-Specific Language):</strong> SQL, HTML, CSS, Terraform — específicos de un dominio.
+<div class="tip"><strong>⚡ EGEL:</strong> Un lenguaje puede soportar más de un paradigma. Python es multi-paradigma: procedural + OOP + funcional. La guía EGEL menciona explícitamente scripting como categoría separada.</div>` },
+    ]
+  },
+  {
+    cls:'comp', icon:'⚙️', title:'Compiladores vs Intérpretes vs JIT',
+    sub:'Cómo se traduce el código fuente a instrucciones ejecutables',
+    desc:'Todo código fuente necesita traducirse a instrucciones que el procesador pueda ejecutar. Hay tres mecanismos principales para lograrlo.',
+    items:[
+      { dot:'#7c3aed', name:'Compiladores', tag:'Traducción estática',
+        body:`El compilador traduce <strong>todo el programa fuente a código máquina antes de ejecutarlo</strong>. El resultado es un ejecutable independiente.<br><br>
+<strong>Fases del compilador:</strong><br>
+1. <strong>Análisis léxico (Lexer/Scanner):</strong> convierte el texto en tokens (palabras clave, identificadores, operadores).<br>
+2. <strong>Análisis sintáctico (Parser):</strong> construye el árbol de parseo (AST) según la gramática del lenguaje.<br>
+3. <strong>Análisis semántico:</strong> verifica tipos, declaraciones, compatibilidad — el significado.<br>
+4. <strong>Generación de código intermedio.</strong><br>
+5. <strong>Optimización.</strong><br>
+6. <strong>Generación de código máquina.</strong><br>
+7. <strong>Enlazado (Linker):</strong> une módulos y bibliotecas en el ejecutable final.<br><br>
+<strong>Lenguajes compilados:</strong> C, C++, Java (a bytecode), Go, Rust.
+<div class="tip"><strong>⚡ EGEL:</strong> Errores de sintaxis los detecta el compilador en la fase de análisis sintáctico — antes de ejecutar nada.</div>` },
+      { dot:'#7c3aed', name:'Intérpretes', tag:'Traducción dinámica',
+        body:`El intérprete <strong>lee y ejecuta el código fuente línea por línea en tiempo de ejecución</strong>. No hay fase de compilación previa.<br><br>
+<strong>Ventajas:</strong> más portables (el mismo script corre en cualquier plataforma con el intérprete instalado), ciclo de desarrollo más rápido, tipado dinámico fácil de implementar.<br>
+<strong>Desventajas:</strong> más lentos que los compilados (la traducción ocurre cada vez que se ejecuta), requieren el intérprete en la máquina destino.<br><br>
+<strong>Lenguajes interpretados:</strong> Python, Ruby, PHP, JavaScript (clásico), Perl.
+<div class="ex"><strong>Analogía:</strong> Compilador = traducir todo un libro antes de leerlo. Intérprete = traductor simultáneo que interpreta mientras el autor habla.</div>` },
+      { dot:'#7c3aed', name:'JIT y máquinas virtuales', tag:'Híbrido',
+        body:`<strong>JIT (Just-In-Time compilation):</strong> compila partes del código en tiempo de ejecución, justo cuando se van a usar. Combina ventajas de ambos enfoques.<br><br>
+<strong>Java Virtual Machine (JVM):</strong> Java compila a <em>bytecode</em> (no código máquina nativo). La JVM interpreta o compila JIT el bytecode. Esto da portabilidad ("Write Once, Run Anywhere") sin sacrificar tanto rendimiento.<br><br>
+<strong>Cross-compiler:</strong> compilador que genera código para una arquitectura diferente a la que lo ejecuta. Común en desarrollo embebido (compilar en x86 para ARM).
+<div class="tip"><strong>⚡ EGEL:</strong> Java NO es puramente compilado ni puramente interpretado. Compila a bytecode, que la JVM ejecuta via JIT. Esta distinción sale en el examen.</div>` },
+      { dot:'#7c3aed', name:'Tokens, gramáticas y árboles de parseo', tag:'Análisis léxico/sintáctico',
+        body:`<strong>Token:</strong> unidad léxica mínima. En <code>int x = 5;</code> los tokens son: <code>int</code> (keyword), <code>x</code> (identifier), <code>=</code> (operator), <code>5</code> (literal), <code>;</code> (separator).<br><br>
+<strong>Gramática (BNF/EBNF):</strong> reglas formales que definen qué secuencias de tokens son válidas. Define la <em>sintaxis</em> del lenguaje.<br><br>
+<strong>Árbol de parseo (AST):</strong> estructura jerárquica que representa la estructura sintáctica del programa. El compilador lo usa para generar código.
+<div class="code"><span class="c">// Expresión: a + b * c</span>
+<span class="c">// Árbol de parseo (respeta precedencia):</span>
+<span class="n">     +</span>
+<span class="n">    / \\</span>
+<span class="n">   a   *</span>
+<span class="n">      / \\</span>
+<span class="n">     b   c</span></div>
+<div class="tip"><strong>⚡ EGEL:</strong> La precedencia de operadores (multiplicación antes que suma) queda codificada en el árbol de parseo, no en los tokens.</div>` },
+    ]
+  },
+  {
+    cls:'tipos', icon:'🏷️', title:'Sistemas de tipos',
+    sub:'Cómo los lenguajes manejan los tipos de datos',
+    desc:'Un sistema de tipos asigna un tipo a cada valor y expresión del programa. Define qué operaciones son válidas y cuándo se verifican.',
+    items:[
+      { dot:'#2563eb', name:'Tipado estático vs dinámico', tag:'Cuándo se verifica',
+        body:`<strong>Tipado estático:</strong> los tipos se verifican en <em>tiempo de compilación</em>. Las variables tienen tipos fijos declarados por el programador. Los errores de tipo se detectan antes de ejecutar.<br>
+<strong>Lenguajes:</strong> C, C++, Java, C#, TypeScript, Go, Rust.<br><br>
+<strong>Tipado dinámico (polimórfico):</strong> los tipos se verifican en <em>tiempo de ejecución</em>. Las variables pueden cambiar de tipo. Más flexible, pero los errores de tipo aparecen durante la ejecución.<br>
+<strong>Lenguajes:</strong> Python, JavaScript, Ruby, PHP, Perl.
+<div class="code"><span class="c">// Estático (Java): tipo fijo en compilación</span>
+<span class="k">int</span> <span class="n">x</span> = 5;
+<span class="n">x</span> = <span class="s">"hola"</span>; <span class="c">// Error en compilación</span>
+
+<span class="c"># Dinámico (Python): tipo en runtime</span>
+<span class="n">x</span> = 5
+<span class="n">x</span> = <span class="s">"hola"</span>  <span class="c"># Válido</span></div>` },
+      { dot:'#2563eb', name:'Tipado fuerte vs débil', tag:'Qué tan estricto',
+        body:`<strong>Tipado fuerte:</strong> no hay conversiones implícitas entre tipos incompatibles. Python es dinámico pero fuerte: <code>"5" + 5</code> da error.<br>
+<strong>Tipado débil:</strong> realiza conversiones implícitas. JavaScript: <code>"5" + 5</code> da <code>"55"</code> (coerción implícita).<br><br>
+<strong>La combinación importa:</strong><br>
+<div class="vs-grid">
+<div class="vs-box"><h4 style="color:#2563eb">Estático + Fuerte</h4>Java, C# — máxima seguridad de tipos en compilación</div>
+<div class="vs-box"><h4 style="color:#7c3aed">Dinámico + Fuerte</h4>Python — flexible pero no coerciona tipos</div>
+<div class="vs-box"><h4 style="color:#ea580c">Estático + Débil</h4>C — tipos fijos pero permite casts implícitos peligrosos</div>
+<div class="vs-box"><h4 style="color:#db2777">Dinámico + Débil</h4>JavaScript — máxima flexibilidad, más propenso a bugs</div>
+</div>
+<div class="tip"><strong>⚡ EGEL:</strong> Fuerte/débil no es lo mismo que estático/dinámico. Python es dinámico Y fuerte. C es estático Y (relativamente) débil.</div>` },
+      { dot:'#2563eb', name:'Tipos primitivos y estructurados', tag:'Tipos de datos',
+        body:`<strong>Tipos primitivos:</strong> valores atómicos proporcionados por el lenguaje.<br>
+• <strong>Enteros:</strong> int, long, short, byte (con signo/sin signo, distintos tamaños).<br>
+• <strong>Flotantes:</strong> float (32 bits), double (64 bits). IEEE 754.<br>
+• <strong>Booleano:</strong> true/false.<br>
+• <strong>Carácter:</strong> char. Un solo carácter Unicode o ASCII.<br><br>
+<strong>Tipos estructurados:</strong> colecciones o composiciones de primitivos.<br>
+• <strong>Arreglo (Array):</strong> colección homogénea de tamaño fijo en posiciones contiguas de memoria.<br>
+• <strong>Struct/Record:</strong> agrupación heterogénea de campos con nombre (bases de OOP en C).<br>
+• <strong>String:</strong> cadena de caracteres. Primitivo en algunos lenguajes, objeto en otros.<br>
+• <strong>Puntero:</strong> almacena una dirección de memoria (C, C++).
+<div class="tip"><strong>⚡ EGEL:</strong> En Java, los primitivos (int, double, boolean) no son objetos. Sus wrappers (Integer, Double, Boolean) sí lo son. Esta distinción importa para colecciones genéricas.</div>` },
+    ]
+  },
+  {
+    cls:'scope', icon:'🔭', title:'Alcance y accesibilidad (Scope)',
+    sub:'Dónde son visibles y accesibles las variables',
+    desc:'El scope define en qué parte del programa una variable existe y puede ser usada. Es uno de los conceptos más importantes para entender el comportamiento de un programa.',
+    items:[
+      { dot:'#db2777', name:'Tipos de scope', tag:'Visibilidad',
+        body:`<strong>Scope local:</strong> la variable solo existe dentro del bloque/función donde se declara. Se destruye al salir del bloque.<br>
+<strong>Scope global:</strong> la variable existe en todo el programa. Peligrosa: cualquier función puede modificarla.<br>
+<strong>Scope de bloque:</strong> existe solo dentro del bloque {} donde se declara (let/const en JavaScript, variables en C dentro de {}).<br>
+<strong>Scope de clase:</strong> atributos de una clase — visibles a todos los métodos de la clase.
+<div class="code"><span class="k">int</span> <span class="n">global</span> = 10;  <span class="c">// scope global</span>
+
+<span class="k">void</span> <span class="f">funcion</span>() {
+  <span class="k">int</span> <span class="n">local</span> = 5;   <span class="c">// scope local</span>
+  {
+    <span class="k">int</span> <span class="n">bloque</span> = 3; <span class="c">// scope de bloque</span>
+  }
+  <span class="c">// bloque ya no existe aquí</span>
+}</div>` },
+      { dot:'#db2777', name:'Variable estática', tag:'Duración',
+        body:`Una variable <strong>static</strong> en una función mantiene su valor entre llamadas. No se reinicializa en cada invocación — vive durante todo el programa.<br><br>
+<strong>Diferencia con global:</strong> una estática local solo es <em>visible</em> dentro de su función (scope local), pero <em>dura</em> todo el programa (duración estática).
+<div class="code"><span class="k">int</span> <span class="f">contador</span>() {
+  <span class="k">static int</span> <span class="n">n</span> = 0;  <span class="c">// se init. solo la primera vez</span>
+  <span class="k">return</span> ++<span class="n">n</span>;
+}
+<span class="c">// contador() → 1, contador() → 2, contador() → 3</span></div>
+<div class="tip"><strong>⚡ EGEL:</strong> static en C/C++ dentro de una función = scope local + duración de todo el programa. No confundir con static de clase en Java (que pertenece a la clase, no a la instancia).</div>` },
+      { dot:'#db2777', name:'Paso de parámetros', tag:'Mecanismos',
+        body:`Cómo se pasan los valores a una función determina si la función puede modificar el original:<br><br>
+<strong>Paso por valor (pass-by-value):</strong> se pasa una copia. La función no puede modificar el original. Por defecto en Java para primitivos y en C.<br>
+<strong>Paso por referencia (pass-by-reference):</strong> se pasa la dirección de memoria. La función modifica el original. C++ con &, C con punteros.<br>
+<strong>Paso por nombre (pass-by-name):</strong> la expresión se re-evalúa cada vez que se usa el parámetro. Raro, usado en Algol.<br>
+<strong>Paso por resultado (pass-by-result / out parameters):</strong> el valor se copia de vuelta al salir. Ada, C# con out.
+<div class="tip"><strong>⚡ EGEL:</strong> En Java, los objetos se pasan por referencia al valor del puntero. El objeto puede mutarse, pero la referencia en sí no cambia. "Pass by value of the reference."</div>` },
+    ]
+  },
+  {
+    cls:'sub', icon:'🔧', title:'Subprogramas y Corrutinas',
+    sub:'Bloques de código reutilizables y controlables',
+    desc:'Los subprogramas permiten dividir un programa en partes manejables y reutilizables. Las corrutinas extienden este concepto con control de flujo múltiple.',
+    items:[
+      { dot:'#d97706', name:'Funciones vs Procedimientos', tag:'Subprogramas',
+        body:`<strong>Función:</strong> subprograma que retorna un valor. En la mayoría de lenguajes, el nombre de la función puede usarse como variable en una expresión.<br>
+<strong>Procedimiento (void function):</strong> subprograma que NO retorna valor. Se llama por sus efectos secundarios.<br><br>
+<strong>Recursión:</strong> una función que se llama a sí misma. Requiere condición base para terminar.<br>
+• <strong>Recursión directa (cíclica):</strong> A se llama a sí misma.<br>
+• <strong>Recursión indirecta (acíclica):</strong> A llama a B, que llama a A.<br><br>
+<strong>Stack de llamadas (call stack):</strong> cada llamada a función crea un frame con sus parámetros y variables locales. La recursión profunda puede causar stack overflow.
+<div class="code"><span class="k">int</span> <span class="f">factorial</span>(<span class="k">int</span> <span class="n">n</span>) {
+  <span class="k">if</span> (<span class="n">n</span> <= 1) <span class="k">return</span> 1;       <span class="c">// condición base</span>
+  <span class="k">return</span> <span class="n">n</span> * <span class="f">factorial</span>(<span class="n">n</span>-1); <span class="c">// recursión directa</span>
+}</span></div>` },
+      { dot:'#d97706', name:'Corrutinas (Coroutines)', tag:'Multiples puntos de entrada',
+        body:`Una <strong>corrutina</strong> es un subprograma con <em>múltiples puntos de entrada y salida</em>. Puede pausar su ejecución y reanudarse desde donde la dejó.<br><br>
+<strong>Diferencia con función normal:</strong> una función tiene UN punto de entrada y UN punto de salida (return). Una corrutina puede salir y volver a entrar múltiples veces.<br><br>
+<strong>Llamada:</strong> resume (no call). La primera llamada entra desde el inicio. Las siguientes retoman desde el punto donde se pausó.
+<div class="code"><span class="c"># Python — generador como corrutina</span>
+<span class="k">def</span> <span class="f">contador</span>():
+    <span class="n">n</span> = 0
+    <span class="k">while True</span>:
+        <span class="k">yield</span> <span class="n">n</span>   <span class="c"># pausa y retorna n</span>
+        <span class="n">n</span> += 1    <span class="c"># reanuda aquí en siguiente llamada</span>
+
+<span class="n">gen</span> = <span class="f">contador</span>()
+<span class="f">next</span>(<span class="n">gen</span>)  <span class="c"># → 0</span>
+<span class="f">next</span>(<span class="n">gen</span>)  <span class="c"># → 1</span></div>
+<div class="tip"><strong>⚡ EGEL:</strong> Lenguajes con corrutinas nativas: C++20, C#, Java (virtual threads), JavaScript (async/await), Kotlin, Python (generators). C no las tiene nativamente.</div>` },
+    ]
+  },
+  {
+    cls:'debug', icon:'🐛', title:'Depuración — Tipos de errores',
+    sub:'Identificar y corregir fallas en el código',
+    desc:'Todo programa puede tener errores. Conocer el tipo de error determina cuándo se detecta y cómo se corrige.',
+    items:[
+      { dot:'#16a34a', name:'Errores de sintaxis', tag:'Compilación',
+        body:`Desviaciones de las reglas gramaticales del lenguaje. El compilador o intérprete los detecta <strong>antes de ejecutar</strong>.<br><br>
+<strong>Ejemplos:</strong> paréntesis sin cerrar, punto y coma faltante, palabra clave mal escrita, llaves desbalanceadas.<br><br>
+<strong>Fáciles de corregir:</strong> el compilador indica exactamente la línea y el tipo de error.
+<div class="code"><span class="c">// Error de sintaxis en Java</span>
+<span class="k">if</span> (<span class="n">x</span> > 0)        <span class="c">// falta {</span>
+  <span class="n">System.out.println</span>(<span class="s">"positivo"</span>)
+<span class="c">// Falta ; al final</span></div>` },
+      { dot:'#16a34a', name:'Errores de runtime (ejecución)', tag:'Ejecución',
+        body:`Ocurren <strong>mientras el programa está corriendo</strong>, ante condiciones inesperadas que el compilador no puede predecir.<br><br>
+<strong>Ejemplos comunes:</strong><br>
+• División por cero.<br>
+• Acceso a índice fuera de rango (ArrayIndexOutOfBoundsException).<br>
+• Referencia nula (NullPointerException).<br>
+• Memoria insuficiente (OutOfMemoryError).<br>
+• Acceso a memoria inválida (segmentation fault en C).<br><br>
+<strong>Se manejan con:</strong> excepciones (try/catch), validaciones previas.
+<div class="tip"><strong>⚡ EGEL:</strong> Se detectan probando con distintos conjuntos de datos: válidos, inválidos y valores límite (boundary values).</div>` },
+      { dot:'#16a34a', name:'Errores lógicos', tag:'Resultado incorrecto',
+        body:`El programa ejecuta <strong>sin fallar pero produce resultados incorrectos</strong>. El más difícil de detectar porque no hay mensaje de error.<br><br>
+<strong>Ejemplos:</strong> condición lógica invertida (usar > en vez de >=), orden incorrecto de operaciones, algoritmo de ordenamiento con lógica errónea.<br><br>
+<strong>Cómo detectarlos:</strong> pruebas unitarias que verifican el resultado esperado, depuradores (debuggers) que inspeccionan el estado paso a paso, logging.
+<div class="code"><span class="c">// Error lógico: cuenta los pares incorrectamente</span>
+<span class="k">for</span> (<span class="k">int</span> <span class="n">i</span> = 0; <span class="n">i</span> < <span class="n">n</span>; <span class="n">i</span>++) {
+  <span class="k">if</span> (<span class="n">i</span> % 2 == 1)  <span class="c">// debería ser == 0 para pares</span>
+    <span class="n">cuenta</span>++;
+}</div>
+<div class="tip"><strong>⚡ EGEL:</strong> Sintaxis = compilador los detecta. Runtime = se detectan al probar. Lógicos = requieren pruebas con resultados esperados definidos.</div>` },
+    ]
+  }
+];
+
+const COMPARA = [
+  {
+    id:'comp-interp', label:'Compilado vs Interpretado',
+    cols:['Compilado','Interpretado'],
+    rows:[
+      ['Traducción','Todo el código antes de ejecutar','Línea por línea en tiempo de ejecución'],
+      ['Velocidad','Más rápido en ejecución','Más lento (traduce en cada ejecución)'],
+      ['Detección errores','Sintaxis detectada en compilación','Errores en tiempo de ejecución'],
+      ['Portabilidad','Ejecutable específico por plataforma','El mismo código en cualquier plataforma con intérprete'],
+      ['Ciclo desarrollo','Compilar → ejecutar → depurar','Editar → ejecutar directamente'],
+      ['Ejemplos','C, C++, Go, Rust','Python, Ruby, PHP, JavaScript clásico'],
+    ]
+  },
+  {
+    id:'estatico-dinamico', label:'Tipado estático vs dinámico',
+    cols:['Estático','Dinámico'],
+    rows:[
+      ['Verificación tipos','En compilación','En ejecución'],
+      ['Declaración','Tipo explícito (o inferido)','No necesaria (var x = algo)'],
+      ['Errores de tipo','Detectados antes de ejecutar','Detectados al ejecutar ese código'],
+      ['Flexibilidad','Menor, más rígido','Mayor, puede cambiar de tipo'],
+      ['Rendimiento','Mejor (tipos conocidos en compilación)','Overhead por verificación en runtime'],
+      ['Ejemplos','Java, C, C++, TypeScript, Go','Python, JavaScript, Ruby, PHP'],
+    ]
+  },
+  {
+    id:'fuerte-debil', label:'Tipado fuerte vs débil',
+    cols:['Fuerte','Débil'],
+    rows:[
+      ['Coerción implícita','No — tipos incompatibles dan error','Sí — convierte tipos automáticamente'],
+      ['"5" + 5','Error de tipo','"55" (JS) o 5 u otro resultado'],
+      ['Seguridad','Mayor — menos bugs por coerción inesperada','Menor — conversiones silenciosas peligrosas'],
+      ['Ejemplos fuertes','Python, Java, C#, Haskell','JavaScript, PHP, C (parcialmente)'],
+      ['Nota clave','Fuerte ≠ estático. Python es dinámico Y fuerte','Débil ≠ dinámico. C es estático Y relativamente débil'],
+    ]
+  },
+  {
+    id:'paso-params', label:'Paso de parámetros',
+    cols:['Por valor','Por referencia'],
+    rows:[
+      ['Qué se pasa','Copia del valor','Dirección de memoria del original'],
+      ['Modificación','La función no afecta al original','La función modifica el original'],
+      ['Seguridad','Mayor — el original no se altera','Menor — efectos secundarios posibles'],
+      ['Rendimiento','Costo de copiar datos grandes','Sin copia — eficiente para objetos grandes'],
+      ['Ejemplos','Primitivos en Java, por defecto en C','C con punteros *, C++ con &, C# con ref'],
+    ]
+  },
+  {
+    id:'errores', label:'Tipos de errores',
+    cols:['Sintaxis','Runtime','Lógico'],
+    rows:[
+      ['Cuándo','Compilación/interpretación','Durante ejecución','Durante ejecución (resultado incorrecto)'],
+      ['Detección','Automática por compilador','Al ejecutar ese código con esos datos','Solo con pruebas que validan resultados'],
+      ['Mensaje','Sí, con línea y descripción','Sí, excepción/crash','No — no hay error visible'],
+      ['Dificultad','Fácil','Media','Difícil'],
+      ['Ejemplo','Falta ; o {','División por cero, null ref','Condición invertida, algoritmo erróneo'],
+    ]
+  },
+  {
+    id:'lenguajes', label:'Lenguajes — resumen EGEL',
+    cols:['Característica','Lenguajes'],
+    rows:[
+      ['Compilados a nativo','C, C++, Go, Rust, Pascal'],
+      ['Compilados a bytecode','Java (JVM), C# (.NET CLR), Kotlin'],
+      ['Interpretados','Python, Ruby, PHP, Perl, JavaScript clásico'],
+      ['JIT en runtime','JavaScript V8, Java HotSpot, .NET'],
+      ['Tipado estático fuerte','Java, C#, Haskell, TypeScript'],
+      ['Tipado dinámico fuerte','Python, Ruby'],
+      ['Tipado dinámico débil','JavaScript, PHP'],
+      ['Multi-paradigma','Python, JavaScript, C++, Scala, Kotlin'],
+    ]
+  },
+];
+
+const FLASH = [
+  {cat:'Compiladores',color:'#7c3aed',bg:'rgba(124,58,237,.1)',emoji:'⚙️',
+   q:'¿Cuáles son las fases del compilador en orden?',
+   a:'Léxico → Sintáctico → Semántico → Código intermedio → Optimización → Código máquina → Enlazado',
+   body:'Análisis léxico (tokens), análisis sintáctico (AST/árbol de parseo), análisis semántico (tipos, declaraciones), generación de código intermedio, optimización, generación de código máquina, linker une módulos.',
+   key:'Léxico → Sintáctico → Semántico → IR → Opt → Código → Link'},
+  {cat:'Tipos',color:'#2563eb',bg:'rgba(37,99,235,.1)',emoji:'🏷️',
+   q:'¿Cuál es la diferencia entre tipado estático/dinámico y tipado fuerte/débil?',
+   a:'Estático/dinámico = CUÁNDO se verifica. Fuerte/débil = QUÉ TAN estricto es',
+   body:'Estático: tipos verificados en compilación. Dinámico: en ejecución. Fuerte: no hay coerciones implícitas entre tipos incompatibles. Débil: convierte tipos automáticamente. Python es dinámico Y fuerte. C es estático pero relativamente débil.',
+   key:'Estático/dinámico = cuándo. Fuerte/débil = qué tan estricto'},
+  {cat:'Compiladores',color:'#7c3aed',bg:'rgba(124,58,237,.1)',emoji:'☕',
+   q:'¿Por qué Java no es puramente compilado ni puramente interpretado?',
+   a:'Compila a bytecode (.class), que la JVM ejecuta vía interpretación o JIT',
+   body:'El compilador javac produce bytecode, no código máquina nativo. La JVM puede interpretar el bytecode o compilarlo JIT a código nativo en runtime. Esto da portabilidad ("Write Once, Run Anywhere") sin sacrificar todo el rendimiento.',
+   key:'Java = bytecode + JVM (JIT). No nativo ni puramente interpretado'},
+  {cat:'Scope',color:'#db2777',bg:'rgba(219,39,119,.1)',emoji:'🔭',
+   q:'¿Qué hace una variable static dentro de una función en C?',
+   a:'Scope local pero duración de todo el programa — mantiene su valor entre llamadas',
+   body:'Una variable static local solo es visible dentro de su función (scope local), pero no se destruye al salir — persiste durante toda la ejecución. Se inicializa solo la primera vez que se llama a la función.',
+   key:'Static local = visible solo aquí + vive todo el programa'},
+  {cat:'Parámetros',color:'#d97706',bg:'rgba(217,119,6,.1)',emoji:'📦',
+   q:'En Java, ¿los objetos se pasan por valor o por referencia?',
+   a:'Por valor del puntero — el objeto puede mutarse pero la referencia no cambia',
+   body:'Java siempre pasa por valor. Para primitivos, pasa la copia del valor. Para objetos, pasa la copia de la referencia (puntero). La función puede modificar el estado del objeto apuntado, pero no puede hacer que la variable original apunte a otro objeto.',
+   key:'Java siempre por valor. Para objetos: valor del puntero'},
+  {cat:'Errores',color:'#16a34a',bg:'rgba(22,163,74,.1)',emoji:'🐛',
+   q:'¿Cuándo se detecta cada tipo de error: sintaxis, runtime y lógico?',
+   a:'Sintaxis = compilación. Runtime = al ejecutar. Lógico = con pruebas que validan resultados',
+   body:'Sintaxis: el compilador/intérprete los detecta antes de ejecutar. Runtime: aparecen al ejecutar con ciertos datos (división por cero, null pointer). Lógicos: el programa ejecuta sin error pero produce resultado incorrecto — solo pruebas los detectan.',
+   key:'Sintaxis = antes. Runtime = durante. Lógico = resultado incorrecto'},
+  {cat:'Compiladores',color:'#7c3aed',bg:'rgba(124,58,237,.1)',emoji:'🌳',
+   q:'¿Qué es un token y qué es un árbol de parseo (AST)?',
+   a:'Token = unidad léxica mínima. AST = estructura jerárquica que representa la sintaxis del programa',
+   body:'El análisis léxico convierte el código fuente en tokens (keywords, identificadores, operadores, literales). El análisis sintáctico organiza los tokens en un AST que representa la estructura gramatical del programa y codifica precedencia de operadores.',
+   key:'Token = átomo léxico. AST = árbol de la estructura sintáctica'},
+  {cat:'Tipos',color:'#2563eb',bg:'rgba(37,99,235,.1)',emoji:'📊',
+   q:'¿Cuál es la diferencia entre un arreglo y un struct en C?',
+   a:'Arreglo = colección homogénea de tamaño fijo. Struct = agrupación heterogénea con campos nombrados',
+   body:'Arreglo: todos los elementos son del mismo tipo, acceso por índice, tamaño fijo en memoria contigua. Struct: campos de distintos tipos, acceso por nombre (punto), permite modelar entidades con propiedades heterogéneas.',
+   key:'Array = homogéneo + índice. Struct = heterogéneo + nombre de campo'},
+  {cat:'Corrutinas',color:'#d97706',bg:'rgba(217,119,6,.1)',emoji:'🔄',
+   q:'¿Cuál es la diferencia fundamental entre una función y una corrutina?',
+   a:'Función = un punto de entrada, un punto de salida. Corrutina = múltiples puntos de entrada/salida con yield',
+   body:'Una función normal entra por el principio, ejecuta y retorna. Una corrutina puede pausarse con yield y reanudarse desde donde paró. Se invoca con resume en vez de call. Útil para generadores, iteradores perezosos y concurrencia cooperativa.',
+   key:'Corrutina = pausa + reanuda con yield/resume'},
+  {cat:'Tipos',color:'#ea580c',bg:'rgba(234,88,12,.1)',emoji:'🔢',
+   q:'¿Cuántos bytes ocupa un float vs un double? ¿Qué estándar usan?',
+   a:'float = 32 bits (4 bytes). double = 64 bits (8 bytes). Ambos usan IEEE 754',
+   body:'IEEE 754 es el estándar internacional para aritmética de punto flotante. float tiene ~7 dígitos de precisión decimal. double tiene ~15-16 dígitos. Para cálculos financieros o científicos, double es el estándar. En embedded systems se usa float para ahorrar memoria.',
+   key:'float = 4 bytes. double = 8 bytes. IEEE 754'},
+  {cat:'Scope',color:'#db2777',bg:'rgba(219,39,119,.1)',emoji:'🗂️',
+   q:'¿Cuál es la diferencia entre scope y tiempo de vida (lifetime) de una variable?',
+   a:'Scope = dónde es visible. Lifetime = cuánto tiempo existe en memoria',
+   body:'Una variable global tiene scope global Y lifetime de todo el programa. Una variable static local tiene scope local (solo visible en su función) pero lifetime de todo el programa. Una variable local normal tiene scope local Y lifetime hasta que termina su bloque.',
+   key:'Scope = visibilidad. Lifetime = duración en memoria'},
+  {cat:'Errores',color:'#16a34a',bg:'rgba(22,163,74,.1)',emoji:'🔍',
+   q:'¿Qué es un debugger y para qué tipo de errores es más útil?',
+   a:'Herramienta que permite ejecutar paso a paso e inspeccionar estado. Más útil para errores lógicos y runtime',
+   body:'Un debugger permite poner breakpoints (pausar en una línea), inspeccionar el valor de variables, ver el call stack y ejecutar instrucción por instrucción. Es la herramienta principal para errores lógicos (resultado incorrecto) y para entender qué ocurre en errores de runtime.',
+   key:'Debugger = breakpoints + inspección de estado + paso a paso'},
+];
+
+const QUESTIONS = [
+  {cat:'comp',catL:'Compiladores',
+   q:'Un equipo desarrolla firmware para un microcontrolador ARM Cortex-M4. El desarrollo ocurre en una laptop con procesador x86-64. El toolchain convierte el código C en un binario que corre en el ARM, aunque la laptop no puede ejecutar ese binario directamente.\n\n¿Qué tipo de herramienta de traducción usan?',
+   opts:['Intérprete de bytecode para ARM','JIT compiler para arquitectura heterogénea','Ensamblador universal de arquitectura neutral','Compilador cruzado (cross-compiler)'],
+   ans:3,
+   exp:'Un cross-compiler (compilador cruzado) genera código para una arquitectura distinta a la que lo ejecuta. La laptop (x86-64) compila el código C y produce un binario ARM — no puede ejecutarlo, pero el microcontrolador sí. Es el enfoque estándar en desarrollo embebido.',
+   trap:'Un JIT compila en runtime en la misma máquina donde ejecuta. Un cross-compiler es específicamente para generar código para OTRA arquitectura desde la máquina de desarrollo.'},
+
+  {cat:'tipos',catL:'Sistemas de tipos',
+   q:'Analiza este código Python:\n\nx = 5\nx = x + "3"\nprint(x)\n\n¿Qué ocurre al ejecutar este código?',
+   opts:['Lanza TypeError en runtime porque Python es fuerte','Imprime "53" por coerción de string implícita','Imprime 8 por coerción numérica implícita','Lanza SyntaxError en tiempo de análisis léxico'],
+   ans:0,
+   exp:'Python es dinámico (tipos verificados en ejecución) pero FUERTE (no hace coerciones implícitas entre tipos incompatibles). int + str lanza TypeError en runtime. Contraste con JavaScript donde "3" + 5 daría "35" por coerción débil.',
+   trap:'Muchos confunden tipado dinámico con tipado débil. Python es dinámico Y fuerte. La coerción implícita pertenece a tipado DÉBIL (JavaScript, PHP), no a tipado dinámico.'},
+
+  {cat:'comp',catL:'Compiladores',
+   q:'El compilador de Java procesa este código:\n\nString nombre = 42;\nint edad = "treinta";\n\n¿En qué fase del compilador se detectan estos errores y por qué?',
+   opts:['Análisis léxico — los tokens son incompatibles','Análisis sintáctico — la gramática de Java no permite estas asignaciones','Análisis semántico — las asignaciones violan el sistema de tipos','En runtime — Java verifica tipos al asignar valores'],
+   ans:2,
+   exp:'El análisis léxico solo tokeniza (int, nombre, =, 42 son tokens válidos individualmente). El análisis sintáctico solo verifica estructura gramatical (tipo variable = valor; es sintácticamente válido). El análisis SEMÁNTICO verifica significado: tipos incompatibles en asignación. Java es estático, lo detecta antes de ejecutar.',
+   trap:'El análisis sintáctico verifica ESTRUCTURA, no tipos. "int x = algo" es sintácticamente correcto independientemente del tipo de "algo". Los errores de tipo pertenecen al análisis semántico.'},
+
+  {cat:'scope',catL:'Scope y Parámetros',
+   q:'Observa este código en C:\n\n#include <stdio.h>\nvoid incrementar(int n) {\n    n = n + 1;\n}\nint main() {\n    int x = 5;\n    incrementar(x);\n    printf("%d", x);\n    return 0;\n}\n\n¿Qué imprime este programa?',
+   opts:['Imprime 6 — incrementar modifica x por referencia','Imprime 5 — C pasa primitivos por valor por defecto','Imprime 0 — la variable local n no retorna el valor','Error de compilación por incompatibilidad de tipos'],
+   ans:1,
+   exp:'En C, los argumentos se pasan por valor por defecto. La función recibe una COPIA de x en la variable local n. Modificar n no afecta a x en main. Para modificar x, la función necesitaría recibir un puntero: void incrementar(int *n) { *n = *n + 1; }',
+   trap:'Un error común es asumir que porque se llama "incrementar", x debe incrementarse. Pero sin pasar el puntero (&x), la función trabaja con una copia completamente independiente.'},
+
+  {cat:'debug',catL:'Depuración',
+   q:'Un sistema bancario calcula intereses compuestos. El programa ejecuta sin errores ni excepciones durante semanas. Un auditor detecta que los saldos están incorrectamente calculados — el código usa interés simple en lugar de compuesto.\n\n¿Qué tipo de error es y cuál es el método primario para haberlo detectado antes?',
+   opts:['Error de runtime — se detecta con manejo de excepciones','Error de sintaxis — el compilador debería detectarlo','Error de compilación — el linker une incorrectamente las funciones','Error lógico — se detecta con pruebas que validan resultados esperados'],
+   ans:3,
+   exp:'Error lógico: el programa ejecuta correctamente (no hay crash ni excepción) pero produce resultados incorrectos. El algoritmo está mal. El único método primario de detección son pruebas unitarias que comparen el resultado calculado contra el valor esperado con datos conocidos.',
+   trap:'El compilador no puede detectar que la LÓGICA del negocio está mal — solo detecta errores de sintaxis y semántica estructural. Que el programa "ejecute sin error" no significa que sea correcto.'},
+
+  {cat:'comp',catL:'Compiladores',
+   q:'Un motor de JavaScript V8 de Google identifica que la función calcularTotal() se llama miles de veces en un loop y la compila a código máquina nativo para acelerar su ejecución, mientras que otras funciones llamadas raramente siguen siendo interpretadas.\n\n¿Qué técnica describe este comportamiento?',
+   opts:['Compilación en tiempo de ejecución basada en frecuencia (JIT)','Compilación cruzada para optimizar bucles internos','Compilación anticipada completa (AOT compilation)','Análisis semántico estático de rutas calientes'],
+   ans:0,
+   exp:'JIT (Just-In-Time): compila partes del código en runtime, priorizando el "hot path" (código ejecutado frecuentemente). V8 monitorea qué funciones se llaman más y las compila a código nativo. Las funciones frías siguen siendo interpretadas para no desperdiciar tiempo compilando código raramente ejecutado.',
+   trap:'AOT (Ahead-Of-Time) compila TODO antes de ejecutar, como javac o gcc. JIT es específicamente compilación selectiva EN RUNTIME basada en patrones de ejecución.'},
+
+  {cat:'tipos',catL:'Sistemas de tipos',
+   q:'Un ingeniero afirma: "TypeScript es mejor que JavaScript para sistemas grandes porque detecta los errores de tipo antes de desplegar a producción."\n\n¿Qué característica del sistema de tipos de TypeScript justifica técnicamente esta afirmación?',
+   opts:['TypeScript usa tipado dinámico con inferencia avanzada en runtime','TypeScript convierte JavaScript en un lenguaje compilado a bytecode','TypeScript agrega tipado estático a JavaScript detectando errores en compilación','TypeScript implementa tipado débil con validación de coerción explícita'],
+   ans:2,
+   exp:'TypeScript es un superconjunto de JavaScript que agrega tipado estático opcional. El compilador tsc verifica tipos en compilación y transpila a JavaScript. Los errores de tipo se detectan antes de ejecutar, no en producción. JavaScript en runtime sigue siendo dinámico y débil.',
+   trap:'TypeScript compila a JavaScript (transpilación), no a bytecode. Y no cambia el comportamiento de JavaScript en runtime — solo agrega verificación estática en la fase de desarrollo/compilación.'},
+
+  {cat:'scope',catL:'Scope y Parámetros',
+   q:'Observa este fragmento en C:\n\n#include <stdio.h>\nint contador() {\n    static int n = 0;\n    return ++n;\n}\nint main() {\n    printf("%d %d %d", contador(), contador(), contador());\n}\n\n¿Qué imprime este programa?',
+   opts:['Imprime 1 1 1 porque n se reinicia en cada llamada','Imprime 0 0 0 porque static inicializa en cero siempre','Imprime 1 2 3 porque n mantiene su valor entre llamadas','Error de compilación porque static no puede usarse en funciones'],
+   ans:2,
+   exp:'Una variable static local se inicializa solo la primera vez que se ejecuta esa línea. En llamadas subsecuentes, mantiene su valor previo. n empieza en 0, la primera llamada lo incrementa a 1 (retorna 1), la segunda a 2, la tercera a 3.',
+   trap:'static NO reinicializa en cada llamada — eso es lo que define a una variable static. Si fuera una variable local normal (sin static), sí empezaría en basura o 0 en cada llamada y retornaría 1 tres veces.'},
+
+  {cat:'sub',catL:'Subprogramas',
+   q:'Un sistema procesa árboles de directorio. La función buscarArchivo(directorio) recorre todas las carpetas: si es un archivo, lo evalúa; si es una carpeta, llama a buscarArchivo(subcarpeta). Con directorios muy profundos (más de 10,000 niveles) el programa falla.\n\n¿Qué causa el fallo y cuál es la causa raíz?',
+   opts:['Error de sintaxis por llamadas anidadas profundas','Stack overflow por agotamiento del call stack en recursión profunda','Tipado dinámico causa errores al mezclar archivos y carpetas','Error lógico porque la condición base del recursivo es incorrecta'],
+   ans:1,
+   exp:'Recursión profunda agota el call stack. Cada llamada recursiva crea un frame en el stack con sus variables locales y dirección de retorno. Con 10,000 niveles, el stack se llena → stack overflow. La solución es convertir la recursión a iteración usando una pila explícita (estructura de datos) en el heap.',
+   trap:'No es error lógico si el resultado es correcto para árboles pequeños. El problema es estructural: la recursión profunda consume el call stack. La condición base puede ser correcta y aun así ocurrir stack overflow con datos suficientemente grandes.'},
+
+  {cat:'debug',catL:'Depuración',
+   q:'Un programador junior escribe:\n\nint division(int a, int b) {\n    return a / b;\n}\n\nEl sistema lo usa con datos de usuarios web. Funciona semanas hasta que un usuario ingresa b=0.\n\n¿Qué tipo de error es, cuándo ocurre y cuál es la corrección adecuada?',
+   opts:['Sintaxis — corregir la declaración del parámetro b','Runtime — validar b != 0 antes de dividir o usar try/catch','Lógico — cambiar el algoritmo de división por uno más robusto','Semántico — el compilador debería rechazar divisores sin validar'],
+   ans:1,
+   exp:'Error de runtime (ArithmeticException en Java, comportamiento indefinido en C). Ocurre solo cuando b=0 llega en ejecución — el compilador no puede predecirlo. Corrección: validar b != 0 antes de dividir, retornar error o lanzar excepción controlada. El compilador no puede saber qué valores tendrá b en runtime.',
+   trap:'No es lógico porque la función hace exactamente lo que dice (dividir a/b). El problema no está en el algoritmo sino en que no se manejan condiciones de entrada inválidas. Los errores lógicos producen resultados incorrectos en casos válidos.'},
+
+  {cat:'comp',catL:'Compiladores',
+   q:'El equipo decide migrar de Python a C++ para un módulo de procesamiento de imágenes crítico para el rendimiento.\n\n¿Cuál es el beneficio técnico principal desde la perspectiva de los lenguajes de programación?',
+   opts:['C++ tiene sintaxis más simple que reduce errores lógicos','C++ compila a código nativo eliminando overhead de interpretación y JIT','C++ tiene tipado dinámico que da más flexibilidad en runtime','C++ soporta más paradigmas que Python en aplicaciones de visión computacional'],
+   ans:1,
+   exp:'C++ compila directamente a código máquina nativo. No hay overhead de intérprete ni JIT. El compilador optimiza exhaustivamente en tiempo de compilación. Python tiene overhead de interpretación, gestión de memoria con GC y tipado dinámico que ralentiza operaciones intensivas. Para procesamiento de imágenes crítico, la diferencia puede ser 10-100x.',
+   trap:'Python también soporta OOP y programación funcional. La ventaja principal es técnica: compilación a código nativo vs interpretación. No es sobre paradigmas ni sintaxis sino sobre el modelo de ejecución.'},
+
+  {cat:'tipos',catL:'Sistemas de tipos',
+   q:'Analiza estas declaraciones en C:\n\nchar letra = \'A\';\nint numero = letra + 1;\nprintf("%c", numero);\n\n¿Qué ocurre al ejecutar este código?',
+   opts:['Error de compilación por asignar char a int','Imprime B por conversión implícita de char a int y aritmética ASCII','Error de runtime por desbordamiento de tipos','Comportamiento indefinido según el estándar C'],
+   ans:1,
+   exp:'C es tipado débil en este aspecto: realiza coerción implícita. char se convierte implícitamente a int con su valor ASCII (\'A\' = 65). 65 + 1 = 66. printf con %c imprime el carácter con ASCII 66, que es \'B\'. Esta es precisamente la aritmética ASCII que permite C por su tipado relativamente débil.',
+   trap:'C es estático (tipos fijos) pero débil (permite coerciones implícitas). La asignación char → int es una conversión implícita legal en C, no un error. Esto demuestra que estático no implica fuerte.'},
+
+  {cat:'sub',catL:'Subprogramas',
+   q:'Un generador en Python implementa una secuencia de Fibonacci:\n\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n\ng = fib()\nprint(next(g), next(g), next(g))',
+   opts:['Lanza StopIteration porque el while es infinito','Imprime 1 1 2 porque yield retorna b no a','Imprime 0 0 0 porque a se reinicia en cada llamada a next()','Imprime 0 1 1 por comportamiento de yield como punto de pausa'],
+   ans:3,
+   exp:'yield convierte fib() en un generador (corrutina). Cada llamada a next() reanuda desde el yield anterior: primera vez retorna a=0 y pausa; segunda retorna a=1 (b anterior); tercera retorna a=1. El estado (a, b) se mantiene entre llamadas — esto es exactamente el comportamiento de una corrutina con múltiples puntos de entrada/salida.',
+   trap:'El while True no causa StopIteration porque el generador nunca llega a un return. StopIteration solo ocurre cuando el generador sale del scope (termina el cuerpo). El estado se PRESERVA entre llamadas a next(), no se reinicia.'},
+];
+
+const nodeState = {};
+const childState = {};
+let activeCompara = 0;
+let flashItems = [...FLASH];
+let flashIdx = 0;
+let flashFlipped = false;
+let flashFilter = 'all';
+let qIdx = 0;
+let qAnswers = Array(QUESTIONS.length).fill(null);
+let qLocked = Array(QUESTIONS.length).fill(false);
+let quizDone = false;
+
+function showPage(id) {
+  ['mapa','compara','flash','quiz'].forEach(p => {
+    document.getElementById('page-'+p).classList.toggle('hidden', p !== id);
+  });
+  document.querySelectorAll('.ntab').forEach((t,i) => {
+    t.classList.toggle('active', ['mapa','compara','flash','quiz'][i] === id);
+  });
+  if (id==='compara') renderCompara();
+  if (id==='flash') renderFlash();
+  if (id==='quiz') renderQuiz();
+  if (id==='mapa') renderMapa();
+  window.scrollTo(0,0);
+}
+
+function renderMapa() {
+  const pg = document.getElementById('page-mapa');
+  const conn = `<div class="d-conn"><div class="d-conn-line"></div><div class="d-conn-txt">▼</div><div class="d-conn-line"></div></div>`;
+  pg.innerHTML = MAPA.map((node,ni) => {
+    const open = nodeState[ni] ? 'open' : '';
+    const children = node.items.map((item,ci) => {
+      const cop = childState[`${ni}-${ci}`] ? 'open' : '';
+      return `<div class="child ${cop}" onclick="toggleChild(${ni},${ci})">
+        <div class="child-head">
+          <div class="child-dot" style="background:${item.dot}"></div>
+          <span class="child-name">${item.name}</span>
+          <span class="child-tag">${item.tag}</span>
+          <span class="child-arrow">▶</span>
+        </div>
+        <div class="child-body">${item.body}</div>
+      </div>`;
+    }).join('');
+    return `<div class="node ${node.cls} ${open}">
+      <div class="node-head" onclick="toggleNode(${ni})">
+        <span class="node-icon">${node.icon}</span>
+        <div><div class="node-title">${node.title}</div><div class="node-sub">${node.sub}</div></div>
+        <span class="node-arrow">▶</span>
+      </div>
+      <div class="node-body">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:10px">${node.desc}</p>
+        ${children}
+      </div>
+    </div>`;
+  }).join(conn);
+}
+
+function toggleNode(ni) { nodeState[ni]=!nodeState[ni]; renderMapa(); }
+function toggleChild(ni,ci) { const k=`${ni}-${ci}`; childState[k]=!childState[k]; renderMapa(); }
+
+function renderCompara() {
+  const pg = document.getElementById('page-compara');
+  const c = COMPARA[activeCompara];
+  const tabs = COMPARA.map((cc,i) => `<button class="ctab ${i===activeCompara?'active':''}" onclick="setCompara(${i})">${cc.label}</button>`).join('');
+  const ths = c.cols.map(h=>`<th>${h}</th>`).join('');
+  const rows = c.rows.map(r=>`<tr><td>${r[0]}</td>${r.slice(1).map(v=>`<td>${v}</td>`).join('')}</tr>`).join('');
+  pg.innerHTML = `<div class="comp-tabs">${tabs}</div>
+  <div class="comp-wrap"><table><thead><tr><th></th>${ths}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function setCompara(i) { activeCompara=i; renderCompara(); }
+
+function getFlashItems() { return flashFilter==='all'?FLASH:FLASH.filter(f=>f.cat===flashFilter); }
+function renderFlash() {
+  const pg = document.getElementById('page-flash');
+  flashItems = getFlashItems();
+  if(flashIdx>=flashItems.length) flashIdx=0;
+  const item = flashItems[flashIdx];
+  const cats = [...new Set(FLASH.map(f=>f.cat))];
+  const filterBtns = ['all',...cats].map(c=>`<button class="ff-btn ${flashFilter===c?'active':''}" onclick="setFlashFilter('${c}')">${c==='all'?'Todas':c}</button>`).join('');
+  const dots = flashItems.map((_,i)=>`<div class="fp-dot ${i<flashIdx?'done':i===flashIdx?'cur':''}"></div>`).join('');
+  const inner = flashFlipped
+    ? `<div class="flash-ans"><div class="ans-title">${item.a}</div><div class="ans-body">${item.body}</div><div class="ans-key">🔑 ${item.key}</div></div>`
+    : `<div><div class="flash-emoji">${item.emoji}</div><div class="flash-q">${item.q}</div></div>`;
+  pg.innerHTML = `<div class="flash-filter">${filterBtns}</div>
+  <div class="flash-wrap">
+    <div class="flash-progress">${dots}</div>
+    <span class="flash-cat" style="background:${item.bg};color:${item.color}">${item.cat}</span>
+    <div class="flash-card" onclick="flipFlash()">${inner}</div>
+    <div class="flash-nav">
+      <button class="btn btn-ghost" ${flashIdx===0?'disabled':''} onclick="moveFlash(-1)">←</button>
+      <span class="flash-ctr">${flashIdx+1} / ${flashItems.length}</span>
+      <button class="btn btn-primary" onclick="moveFlash(1)">${flashIdx===flashItems.length-1?'Reiniciar':'Siguiente →'}</button>
+    </div>
+  </div>`;
+}
+function flipFlash() { flashFlipped=!flashFlipped; renderFlash(); }
+function moveFlash(d) { flashFlipped=false; flashIdx=(flashIdx+d+flashItems.length)%flashItems.length; renderFlash(); }
+function setFlashFilter(cat) { flashFilter=cat; flashIdx=0; flashFlipped=false; renderFlash(); }
+
+function renderQuiz() {
+  const pg = document.getElementById('page-quiz');
+  if(quizDone){ pg.innerHTML=renderResults(); return; }
+  const q = QUESTIONS[qIdx];
+  const prog = Math.round(qIdx/QUESTIONS.length*100);
+  const letters = ['A','B','C','D'];
+  const hasCode = q.q.includes('\n');
+  let qHtml = '';
+  if(hasCode) {
+    const parts = q.q.split('\n\n');
+    if(parts.length >= 3) {
+      const intro = parts[0];
+      const code = parts.slice(1, parts.length-1).join('\n\n');
+      const pregunta = parts[parts.length-1];
+      qHtml = `<div class="qtxt" style="margin-bottom:8px">${intro}</div><div class="qcode">${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="qtxt">${pregunta}</div>`;
+    } else if(parts.length === 2) {
+      const code = parts[0];
+      const pregunta = parts[1];
+      qHtml = `<div class="qcode">${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="qtxt">${pregunta}</div>`;
+    } else {
+      qHtml = `<div class="qtxt">${q.q}</div>`;
+    }
+  } else {
+    qHtml = `<div class="qtxt">${q.q}</div>`;
+  }
+  const opts = q.opts.map((o,i)=>{
+    let cls='opt';
+    if(qLocked[qIdx]){ cls+=' locked'; if(i===q.ans) cls+=' correct'; else if(i===qAnswers[qIdx]&&i!==q.ans) cls+=' wrong'; else cls+=' dimmed'; }
+    return `<button class="${cls}" onclick="qAnswer(${i})"><span class="letter">${letters[i]}</span><span>${o}</span></button>`;
+  }).join('');
+  const fb = qLocked[qIdx] ? `<div class="fb ${qAnswers[qIdx]===q.ans?'ok':'no'}">
+    <div class="fb-tag">${qAnswers[qIdx]===q.ans?'✓ CORRECTO':'✗ INCORRECTO'}</div>
+    <div class="fb-text">${q.exp}</div>
+    <div class="fb-trap"><div class="trap-tag">⚠ TRAMPA</div><p>${q.trap}</p></div>
+  </div>` : '';
+  const dots = QUESTIONS.map((_,i)=>{
+    const a=qAnswers[i]; const ic=a===QUESTIONS[i].ans; const iw=a!==null&&!ic;
+    const bg=i===qIdx?'var(--teal)':ic?'var(--green)':iw?'var(--red)':'var(--card2)';
+    const bd=i===qIdx?'var(--teal)':ic?'var(--green2)':iw?'var(--red2)':'var(--border)';
+    const col=(i===qIdx||a!==null)?'#fff':'var(--text2)';
+    return `<button class="qdot" onclick="goQ(${i})" style="background:${bg};border-color:${bd};color:${col}">${i+1}</button>`;
+  }).join('');
+  pg.innerHTML = `<div class="pbar"><div class="label">${qIdx+1}/${QUESTIONS.length}</div><div class="track"><div class="fill" style="width:${prog}%"></div></div><div class="label">${prog}%</div></div>
+  <div class="qcard">
+    <div class="qnum">PREGUNTA ${qIdx+1}</div>
+    <span class="qtag ${q.cat}">${q.catL}</span>
+    ${qHtml}
+    <div class="opts">${opts}</div>
+    ${fb}
+    ${qLocked[qIdx]?`<div class="nav">
+      ${qIdx>0?`<button class="btn btn-ghost" onclick="goQ(${qIdx-1})">← Anterior</button>`:''}
+      ${qIdx<QUESTIONS.length-1?`<button class="btn btn-primary" onclick="goQ(${qIdx+1})">Siguiente →</button>`:`<button class="btn btn-primary" onclick="finishQuiz()">Ver resultados</button>`}
+    </div>`:''}
+    <div class="qdots">${dots}</div>
+  </div>`;
+}
+
+function qAnswer(i) { if(qLocked[qIdx]) return; qAnswers[qIdx]=i; qLocked[qIdx]=true; renderQuiz(); }
+function goQ(i) { qIdx=i; renderQuiz(); window.scrollTo(0,0); }
+function finishQuiz() { quizDone=true; renderQuiz(); }
+
+function renderResults() {
+  const total=QUESTIONS.length;
+  const correct=qAnswers.filter((a,i)=>a===QUESTIONS[i].ans).length;
+  const pct=Math.round(correct/total*100);
+  const cls=pct>=80?'score-ok':pct>=60?'score-mid':'score-bad';
+  const cats=[
+    {id:'comp',label:'Compiladores',color:'#7c3aed'},
+    {id:'tipos',label:'Sistemas de tipos',color:'#2563eb'},
+    {id:'scope',label:'Scope y Parámetros',color:'#db2777'},
+    {id:'sub',label:'Subprogramas',color:'#d97706'},
+    {id:'debug',label:'Depuración',color:'#16a34a'},
+  ];
+  const catRows=cats.map(cat=>{
+    const qs=QUESTIONS.filter(q=>q.cat===cat.id);
+    if(!qs.length) return '';
+    const c=qs.filter(q=>{ const idx=QUESTIONS.indexOf(q); return qAnswers[idx]===q.ans; }).length;
+    const p=Math.round(c/qs.length*100);
+    return `<div class="cat-row"><span class="cat-name">${cat.label}</span><div class="cat-track"><div class="cat-fill" style="width:${p}%;background:${cat.color}"></div></div><span class="cat-val">${c}/${qs.length}</span></div>`;
+  }).join('');
+  return `<div class="results"><h2>Resultado final</h2>
+    <div class="score-big ${cls}">${correct}/${total}</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:16px">${pct}% · Lenguajes de Desarrollo</div>
+    <div class="cat-scores">${catRows}</div>
+    <div class="nav" style="margin-top:20px">
+      <button class="btn btn-primary" onclick="resetQuiz()">🔄 Reintentar</button>
+      <button class="btn btn-ghost" onclick="showPage('mapa')">🗺️ Ver mapa</button>
+      <button class="btn btn-ghost" onclick="showPage('flash')">🃏 Flashcards</button>
+    </div>
+  </div>`;
+}
+function resetQuiz() { qIdx=0; qAnswers=Array(QUESTIONS.length).fill(null); qLocked=Array(QUESTIONS.length).fill(false); quizDone=false; renderQuiz(); }
+
+function toggleTheme(){
+  const dark = document.body.classList.toggle('dark');
+  document.getElementById('theme-btn').textContent = dark ? '☀️' : '🌙';
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  if(localStorage.getItem('theme')==='dark'){
+    document.body.classList.add('dark');
+    document.getElementById('theme-btn').textContent='☀️';
+  }
+  renderMapa();
+});
+</script>
+</body>
+</html>
